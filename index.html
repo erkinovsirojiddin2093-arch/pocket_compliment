@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Pocket Compliment</title>
+    <meta name="description" content="Press a button, get one strange, specific compliment." />
+    <meta name="theme-color" content="#FFFFFF" />
+    <meta property="og:title" content="Pocket Compliment" />
+    <meta property="og:description" content="Press a button, get one strange, specific compliment." />
+    <meta property="og:type" content="website" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%23142A66'/%3E%3Cpath d='M6.5 8.5h11v4.25a5.5 5.5 0 0 1-11 0z' fill='%23fff'/%3E%3Cpath d='M6.5 8.5h11' stroke='%237FB0FF' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap" rel="stylesheet" />
+
+    <style>
+      :root {
+        --ink: #0a1a3a;
+        --ink-2: #46557a;
+        --ink-3: #7a87a3;
+        --line: #e4e8f0;
+        --subtle: #f4f6fa;
+        --navy: #142a66;
+        --navy-hover: #0f2052;
+        --accent: #2563eb;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        -webkit-text-size-adjust: 100%;
+        -webkit-tap-highlight-color: transparent;
+        color-scheme: light;
+      }
+
+      body {
+        margin: 0;
+        background: #ffffff;
+        color: var(--ink);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        font-feature-settings: "cv11";
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .app {
+        min-height: 100vh;
+        min-height: 100dvh;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        max-width: 640px;
+        margin: 0 auto;
+        padding: 18px 20px calc(20px + env(safe-area-inset-bottom));
+      }
+
+      /* Header ---------------------------------------------------------- */
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 40px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+
+      .seen {
+        font-size: 12.5px;
+        color: var(--ink-3);
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* Card ------------------------------------------------------------ */
+
+      main {
+        display: grid;
+        align-items: center;
+        padding: 28px 0;
+      }
+
+      .card {
+        position: relative;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: #ffffff;
+        box-shadow:
+          0 1px 2px rgba(10, 26, 58, 0.04),
+          0 16px 40px rgba(10, 26, 58, 0.07);
+        padding: 22px 24px 18px;
+      }
+
+      .card-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 12.5px;
+        font-weight: 500;
+        color: var(--ink-3);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .stitch {
+        flex: 1;
+        margin: 0 14px;
+        border-top: 1.5px dashed #d6dce8;
+      }
+
+      .line {
+        margin: 22px 0 26px;
+        min-height: calc(1.34em * 4);
+        font-size: clamp(22px, 5.6vw, 30px);
+        line-height: 1.34;
+        font-weight: 550;
+        letter-spacing: -0.018em;
+        text-wrap: pretty;
+      }
+
+      .line.placeholder {
+        color: var(--ink-2);
+        font-weight: 500;
+      }
+
+      .card-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding-top: 14px;
+        border-top: 1px solid var(--line);
+        font-size: 12.5px;
+        color: var(--ink-3);
+      }
+
+      /* Buttons --------------------------------------------------------- */
+
+      button {
+        font: inherit;
+        cursor: pointer;
+        border: 0;
+      }
+
+      button:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+      }
+
+      .primary {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        max-width: 380px;
+        height: 54px;
+        margin: 0 auto;
+        border-radius: 14px;
+        background: var(--navy);
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: -0.005em;
+        box-shadow: 0 1px 2px rgba(10, 26, 58, 0.2);
+        transition:
+          background-color 150ms ease,
+          transform 120ms ease;
+        touch-action: manipulation;
+        user-select: none;
+      }
+
+      .primary:hover {
+        background: var(--navy-hover);
+      }
+
+      .primary:active {
+        transform: scale(0.98);
+      }
+
+      .copy {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        height: 32px;
+        padding: 0 10px;
+        margin-right: -8px;
+        border-radius: 8px;
+        background: transparent;
+        color: var(--ink-2);
+        font-size: 13px;
+        font-weight: 500;
+        transition:
+          background-color 150ms ease,
+          color 150ms ease;
+      }
+
+      .copy:hover {
+        background: var(--subtle);
+        color: var(--ink);
+      }
+
+      .copy[hidden] {
+        display: none;
+      }
+
+      .copy.done {
+        color: var(--accent);
+      }
+
+      .actions {
+        text-align: center;
+      }
+
+      .hint {
+        margin: 12px 0 0;
+        font-size: 12.5px;
+        color: var(--ink-3);
+      }
+
+      kbd {
+        display: inline-block;
+        padding: 1px 6px;
+        border: 1px solid var(--line);
+        border-bottom-width: 2px;
+        border-radius: 5px;
+        font: 500 11.5px/1.4 Inter, ui-sans-serif, system-ui, sans-serif;
+        color: var(--ink-2);
+        background: #ffffff;
+      }
+
+      @media (hover: none) {
+        .keyboard-only {
+          display: none;
+        }
+      }
+
+      /* Motion ---------------------------------------------------------- */
+
+      .line.out {
+        animation: line-out 140ms ease-in forwards;
+      }
+
+      .line.in {
+        animation: line-in 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      .card.lift {
+        animation: lift 360ms cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      @keyframes line-out {
+        to {
+          opacity: 0;
+          transform: translateY(-6px);
+        }
+      }
+
+      @keyframes line-in {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+      }
+
+      @keyframes lift {
+        35% {
+          transform: translateY(-3px);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .line.out,
+        .line.in,
+        .card.lift {
+          animation: none;
+        }
+        .primary {
+          transition: none;
+        }
+      }
+
+      @media (min-width: 640px) {
+        .app {
+          padding-top: 28px;
+        }
+        .card {
+          padding: 28px 32px 20px;
+        }
+        .line {
+          margin: 26px 0 30px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="app">
+      <header>
+        <div class="brand">
+          <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
+            <rect width="24" height="24" rx="6" fill="#142A66" />
+            <path d="M6.5 8.5h11v4.25a5.5 5.5 0 0 1-11 0z" fill="#FFFFFF" />
+            <path d="M6.5 8.5h11" stroke="#7FB0FF" stroke-width="1.6" stroke-linecap="round" />
+          </svg>
+          Pocket Compliment
+        </div>
+        <span class="seen" id="seen" aria-hidden="true"></span>
+      </header>
+
+      <main>
+        <article class="card" id="card" aria-labelledby="line">
+          <div class="card-top">
+            <span id="number">No. &mdash;</span>
+            <span class="stitch" aria-hidden="true"></span>
+            <span>For you</span>
+          </div>
+          <p class="line placeholder" id="line" aria-live="polite">
+            Press the button for one strange, specific compliment.
+          </p>
+          <div class="card-foot">
+            <span id="total"></span>
+            <button class="copy" id="copy" type="button" hidden>
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <rect x="5.25" y="5.25" width="8" height="8" rx="1.75" />
+                <path d="M10.75 5.25V3.5a1.25 1.25 0 0 0-1.25-1.25H3.5A1.25 1.25 0 0 0 2.25 3.5v6a1.25 1.25 0 0 0 1.25 1.25h1.75" />
+              </svg>
+              <span>Copy</span>
+            </button>
+          </div>
+        </article>
+      </main>
+
+      <div class="actions">
+        <button class="primary" id="next" type="button">Compliment me</button>
+        <p class="hint keyboard-only">or press <kbd>Space</kbd></p>
+      </div>
+    </div>
+
+    <noscript>
+      <p style="text-align: center; padding: 0 20px; color: #46557a">Pocket Compliment needs JavaScript to pick a compliment.</p>
+    </noscript>
+
+    <script>
+      // All compliments live here, in the page itself. Add or edit lines freely.
+      const COMPLIMENTS = [
+        "You would return a shopping cart all the way to the corral, even in light rain.",
+        "You hold doors at the perfect distance: polite, but nobody has to jog for it.",
+        "Your handwriting looks like it has never rushed anyone.",
+        "A lost dog would pick you out of a crowd to walk up to.",
+        "Your houseplants are thriving because they can tell you believe in them.",
+        "If you were a font, you’d work equally well on wedding invitations and tax forms.",
+        "You laugh at the clever part of a joke, not just the end of it.",
+        "People listen to your voicemails all the way through.",
+        "Waiters remember you, and they’re smiling when they do.",
+        "You have the energy of a phone that is still at 80% at six in the evening.",
+        "You make group chats feel less like homework.",
+        "Somewhere, a pigeon considers you a reliable part of its morning.",
+        "You fold fitted sheets with a patience most people never find for anything.",
+        "You’d make an excellent lighthouse: steady, visible, and never dramatic about it.",
+        "You remember how people take their tea, which is basically a love language.",
+        "You’d be the calm voice in a stuck elevator.",
+        "You return borrowed books in slightly better shape than they left.",
+        "Your playlists have no skips, only pleasant surprises.",
+        "You give directions using landmarks that still exist.",
+        "You would survive being in a sitcom without ever becoming the punchline.",
+        "You treat the last slice of pizza as a diplomatic matter, and everyone respects the outcome.",
+        "A very picky cat would still leave you a five-star review.",
+        "Your “five minutes away” is legally binding.",
+        "You could make a waiting room feel like the opening chapter of a good novel.",
+        "You split desserts exactly in half and then offer the bigger half anyway.",
+        "You notice someone’s new haircut before they have to mention it.",
+        "You carry snacks the way other people carry first-aid kits.",
+        "You could feed someone’s goldfish for a week and the goldfish would ask for you again.",
+        "Your email subject lines actually describe the email.",
+        "You could talk a bee out of a window without either of you panicking.",
+        "You’d be an unbeatable partner in a three-legged race.",
+        "When you say “let’s get coffee sometime,” coffee actually happens.",
+        "Your calendar quietly keeps room for other people’s emergencies.",
+        "You are what a well-placed bench is to a long walk.",
+        "You turn “I don’t know” into “let’s find out” without making it weird.",
+        "You have the patience of someone untangling headphones on a moving bus.",
+        "You’d make a wonderful museum audio guide: unhurried, informative, a little bit funny.",
+        "Your hugs have excellent timing and very good posture.",
+        "Dogs at the park probably compare notes about you.",
+        "You make leftovers feel like a planned meal.",
+        "You are the feeling of finding a working pen on the first try.",
+        "You’d spot that the cake says the wrong name and fix it before anyone noticed.",
+        "You could explain taxes to a seven-year-old and they would say thank you.",
+        "You take the slightly worse parking spot so someone else gets the good one.",
+        "If you were weather, you’d be the first warm day after a long winter.",
+        "You know when a silence needs filling and when it just needs company.",
+        "You’re the one who finally straightens the picture frame that’s been crooked for three years.",
+        "Your apologies are specific, which is rare and deeply impressive.",
+        "People quote your compliments back to you years later.",
+        "You’re the phone charger someone brings to the party for everyone.",
+        "You walk at a speed that makes conversation possible.",
+        "You make the “reply all” button look responsible.",
+        "You’d be the one to find the lost earring in a dark parking lot.",
+        "Your wedding toast would be under three minutes and leave everyone a little teary.",
+        "You can find the scissors in other people’s kitchens.",
+        "You’d treat a borrowed bicycle like it belonged to a museum.",
+        "When you say “take your time,” people can tell you mean it.",
+        "You are a good reason to open the group chat.",
+        "You rinse the plate before leaving it in the sink, for the next person’s sake.",
+        "You give strangers the good directions, not just the fast ones.",
+        "Your laugh makes other people laugh before they know what’s funny.",
+        "You pick the right size container for leftovers on the first try.",
+        "You’re the friend people text first when they finally have good news.",
+        "You’d finish the jigsaw puzzle and leave the last piece for someone else.",
+        "You read the instructions and then help the person who didn’t.",
+        "Your patience with slow Wi-Fi is honestly inspiring.",
+        "Your “quick question” is genuinely quick.",
+        "You’d fix a wobbly café table with a folded napkin and never mention it.",
+        "You make an ordinary Tuesday feel a little more like Friday.",
+        "You’d be the best possible person to be stuck in a long queue with.",
+        "You know the difference between giving advice and listening, and you choose well.",
+        "You remember the names of your neighbors’ dogs.",
+        "You turn the music down when the driver is parking. Respect.",
+        "You could organize a group trip and everyone would still be friends afterwards.",
+        "You leave rooms a little tidier and conversations a little kinder.",
+        "Someone would be lucky to inherit a sourdough starter from you.",
+        "You have strong “I saw this and thought of you” energy.",
+        "You make it easy for people to say no, which is exactly why they trust you.",
+        "You tilt the umbrella toward the other person without noticing you’ve done it.",
+        "A nervous public speaker would find your face in the crowd and feel better.",
+        "You know exactly how much milk turns the tea the right color.",
+        "You could be trusted with the music on a six-hour drive.",
+        "You close cupboard doors you didn’t even open.",
+        "You remember which friend is vegetarian before the restaurant is booked.",
+        "You can tell a story with a beginning, a middle and an end, which is rarer than people think.",
+        "You would return a lost wallet with the cash still in it and a short, kind note.",
+        "You could make a hotel lobby feel like somebody’s living room.",
+        "Your texts end conversations at exactly the right moment.",
+        "A toddler would hand you their half-eaten cracker as a sign of deep trust.",
+        "You say “good morning” like it comes with a little extra good news.",
+        "You could keep a conversation going with a very shy uncle at a wedding.",
+        "You make a busy kitchen feel like there’s room for everyone.",
+        "You notice when the person next to you is cold before they say anything.",
+        "You’re the first to learn the new person’s name at work, and you use it.",
+        "You leave the good pen at the bank counter for the next person.",
+        "You’d make an excellent co-pilot for a road trip with no map.",
+        "Your “no worries” actually removes the worries.",
+        "The moon probably checks in on you specifically.",
+      ];
+
+      const $ = (id) => document.getElementById(id);
+      const lineEl = $("line");
+      const card = $("card");
+      const numberEl = $("number");
+      const nextBtn = $("next");
+      const copyBtn = $("copy");
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+      $("total").textContent = `${COMPLIMENTS.length} in the pocket, no repeats`;
+
+      // A shuffled bag: every compliment appears once before any repeats.
+      let bag = [];
+      let current = -1;
+      let seen = 0;
+      let busy = false;
+
+      function refill() {
+        bag = COMPLIMENTS.map((_, i) => i);
+        for (let i = bag.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [bag[i], bag[j]] = [bag[j], bag[i]];
+        }
+        // Never show the same line twice in a row across a reshuffle.
+        if (bag[bag.length - 1] === current && bag.length > 1) {
+          [bag[0], bag[bag.length - 1]] = [bag[bag.length - 1], bag[0]];
+        }
+      }
+
+      function render(index) {
+        current = index;
+        seen += 1;
+        lineEl.textContent = COMPLIMENTS[index];
+        lineEl.classList.remove("placeholder");
+        numberEl.textContent = `No. ${String(index + 1).padStart(3, "0")}`;
+        $("seen").textContent = `${seen} received`;
+        nextBtn.textContent = "Another one";
+        copyBtn.hidden = false;
+        resetCopy();
+      }
+
+      function next() {
+        if (busy) return;
+        if (!bag.length) refill();
+        const index = bag.pop();
+
+        if (reduceMotion.matches) {
+          render(index);
+          return;
+        }
+
+        busy = true;
+        lineEl.classList.remove("in");
+        lineEl.classList.add("out");
+        card.classList.remove("lift");
+        void card.offsetWidth; // restart the lift animation
+        card.classList.add("lift");
+
+        setTimeout(() => {
+          render(index);
+          lineEl.classList.remove("out");
+          lineEl.classList.add("in");
+          busy = false;
+        }, 140);
+      }
+
+      function resetCopy() {
+        copyBtn.classList.remove("done");
+        copyBtn.querySelector("span").textContent = "Copy";
+      }
+
+      async function copy() {
+        const text = lineEl.textContent.trim();
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch {
+          const area = document.createElement("textarea");
+          area.value = text;
+          area.setAttribute("readonly", "");
+          area.style.position = "fixed";
+          area.style.opacity = "0";
+          document.body.appendChild(area);
+          area.select();
+          document.execCommand("copy");
+          area.remove();
+        }
+        copyBtn.classList.add("done");
+        copyBtn.querySelector("span").textContent = "Copied";
+        clearTimeout(copy.timer);
+        copy.timer = setTimeout(resetCopy, 1600);
+      }
+
+      nextBtn.addEventListener("click", next);
+      copyBtn.addEventListener("click", copy);
+
+      // Space or Enter anywhere on the page (buttons handle their own keys).
+      document.addEventListener("keydown", (e) => {
+        if (e.target instanceof HTMLButtonElement || e.metaKey || e.ctrlKey || e.altKey) return;
+        if (e.key === " " || e.key === "Enter") {
+          e.preventDefault();
+          next();
+        }
+      });
+    </script>
+  </body>
+</html>
